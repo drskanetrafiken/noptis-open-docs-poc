@@ -1,0 +1,4 @@
+# PoC: Aktivera Code Owners först när ett verkligt GitHub-team har utsetts.
+# Exempel (avkommentera och ersätt med ett existerande team):
+# /docs/ @your-org/standards-maintainers
+# /schemas/ @your-org/standards-maintainers
