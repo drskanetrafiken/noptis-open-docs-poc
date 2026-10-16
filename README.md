@@ -46,6 +46,7 @@ You can contribute directly through GitHub without installing any development to
 3. Click the **Edit** (pencil) icon on GitHub.
 4. Make your changes and propose them through a Pull Request.
 5. Submit your Pull Request for review.
+6. BlaBla
 
 For larger contributions, you can fork the repository, make changes locally, and [create a Pull Request](https://github.com/drskanetrafiken/noptis-open-docs-poc/compare).
 
@@ -144,3 +145,5 @@ See [LICENSING.md](https://github.com/drskanetrafiken/noptis-open-docs-poc/blob/
 ---
 
 **Disclaimer:** This repository is an experimental proof of concept and is not an official publication of the NOPTIS standard.
+
+
