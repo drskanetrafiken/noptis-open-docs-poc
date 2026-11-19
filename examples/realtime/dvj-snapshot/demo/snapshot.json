@@ -1,0 +1,21 @@
+{
+  "meta": { "publicationDateTime": "2026-11-11T10:05:00Z" },
+  "gid": "9015001017500019",
+  "operatingDayDate": "2026-11-11",
+  "state": "NORMALPROGRESS",
+  "calls": [
+    {
+      "sequenceNumber": 1,
+      "departure": { "targetDateTime": "2026-11-11T10:11:00Z" }
+    },
+    {
+      "sequenceNumber": 2,
+      "arrival": { "targetDateTime": "2026-11-11T10:18:00Z", "expectedDateTime": "2026-11-11T10:19:00Z" },
+      "departure": { "targetDateTime": "2026-11-11T10:18:00Z", "expectedDateTime": "2026-11-11T10:19:30Z" }
+    },
+    {
+      "sequenceNumber": 3,
+      "arrival": { "targetDateTime": "2026-11-11T10:27:00Z" }
+    }
+  ]
+}

@@ -16,7 +16,8 @@ export default defineConfig({
         items: [
           { text: 'Översikt', link: '/' },
           { text: 'RII', link: '/interfaces/rii/' },
-          { text: 'RII 2.0', link: '/interfaces/rii/2.0/' }
+          { text: 'RII 2.0', link: '/interfaces/rii/2.0/' },
+          { text: 'DVJ Snapshot (demo)', link: '/interfaces/realtime/dvj-snapshot/' }
         ]
       }
     ],

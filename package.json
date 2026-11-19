@@ -6,9 +6,15 @@
   "scripts": {
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
+    "docs:preview": "vitepress preview docs",
+    "validate:json": "node scripts/validate-json.mjs",
+    "validate:asyncapi": "node scripts/validate-asyncapi.mjs",
+    "validate": "npm run validate:json && npm run validate:asyncapi"
   },
   "devDependencies": {
+    "@asyncapi/parser": "^3.6.6",
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
     "vitepress": "^2.0.0-alpha.20"
   }
 }
