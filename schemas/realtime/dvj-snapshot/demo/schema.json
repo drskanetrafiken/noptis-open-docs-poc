@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DVJ Snapshot (demo)",
+  "description": "ILLUSTRATIVE DEMO ONLY. Not the official NOPTIS PoC 2 v0.3.0 schema and not an approved NOPTIS specification. A deliberately small subset of fields, loosely based on the PoC 2 whitepaper, used to exercise validation tooling in this repository. It does not represent every real NOPTIS requirement.",
+  "type": "object",
+  "properties": {
+    "meta": {
+      "description": "Message metadata.",
+      "type": "object",
+      "properties": {
+        "publicationDateTime": {
+          "description": "When this snapshot was published (RFC 3339 date-time).",
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["publicationDateTime"],
+      "additionalProperties": false
+    },
+    "gid": {
+      "description": "Service journey identifier (illustrative 16-digit GID).",
+      "type": "string",
+      "pattern": "^[0-9]{16}$"
+    },
+    "operatingDayDate": {
+      "description": "Operating day the journey belongs to (RFC 3339 full-date).",
+      "type": "string",
+      "format": "date"
+    },
+    "state": {
+      "description": "Journey progress state. Illustrative subset, not the official list of states.",
+      "type": "string",
+      "enum": ["EXPECTED", "NORMALPROGRESS", "SLOWPROGRESS", "FASTPROGRESS", "CANCELLED", "COMPLETED"]
+    },
+    "calls": {
+      "description": "Ordered calls (stops) of the journey.",
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/call" }
+    }
+  },
+  "required": ["meta", "gid", "operatingDayDate", "state", "calls"],
+  "additionalProperties": false,
+  "$defs": {
+    "call": {
+      "type": "object",
+      "properties": {
+        "sequenceNumber": {
+          "description": "Position of the call within the journey, starting at 1.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "arrival": { "$ref": "#/$defs/timing" },
+        "departure": { "$ref": "#/$defs/timing" }
+      },
+      "required": ["sequenceNumber"],
+      "anyOf": [{ "required": ["arrival"] }, { "required": ["departure"] }],
+      "additionalProperties": false
+    },
+    "timing": {
+      "type": "object",
+      "properties": {
+        "targetDateTime": {
+          "description": "Planned (timetabled) time.",
+          "type": "string",
+          "format": "date-time"
+        },
+        "expectedDateTime": {
+          "description": "Current prediction, if available.",
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["targetDateTime"],
+      "additionalProperties": false
+    }
+  }
+}

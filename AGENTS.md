@@ -13,12 +13,13 @@ Shared instructions for AI coding agents and human contributors working in this 
 
 - `docs/` – VitePress site. Config: `docs/.vitepress/config.mts` (base path from `VITEPRESS_BASE`, local search, edit links).
 - `schemas/` – canonical machine-readable contracts (source of truth), e.g. `schemas/rii/2.0/`.
-- `apis/` – API definitions (e.g. AsyncAPI), once introduced.
-- `examples/` – sample messages and small runnable examples; mirror the `schemas/` directory tree.
-- `scripts/` – repository validation scripts, once introduced.
-- `.github/workflows/` – `checks.yml` (build on PRs and pushes to `main`) and `pages.yml` (manual Pages deploy).
+- `apis/` – API definitions as `asyncapi.yaml` (AsyncAPI 3.0).
+- `examples/` – sample messages; mirror the `schemas/` directory tree.
+- `scripts/` – `validate-json.mjs` and `validate-asyncapi.mjs` (Node, no build step).
+- `.github/workflows/` – `checks.yml` (`npm ci`, `npm run validate`, `npm run docs:build` on PRs and pushes to `main`) and `pages.yml` (manual Pages deploy).
 
 `schemas/rii/2.0/` and `examples/rii/2.0/` hold placeholders only. Do not add or change RII material unless asked.
+`*/realtime/dvj-snapshot/demo/` is an illustrative, non-official demo (not NOPTIS v0.3.0); its page is `docs/interfaces/realtime/dvj-snapshot/index.md`.
 
 ## Commands
 
@@ -29,9 +30,17 @@ npm ci               # install exact locked dependencies
 npm run docs:dev     # local dev server
 npm run docs:build   # build the site to docs/.vitepress/dist
 npm run docs:preview # preview the built site
+npm run validate     # validate:json + validate:asyncapi
 ```
 
-No validation scripts exist yet. Do not document or call commands that are not in `package.json`.
+Do not document or call commands that are not in `package.json`.
+
+## Validation conventions
+
+- A schema is `schemas/<path>/schema.json` with `$schema: "https://json-schema.org/draft/2020-12/schema"`. Every direct `*.json` file in `examples/<path>/` must validate against it. A schema without examples, or an example without a schema, fails.
+- An API is `apis/<path>/asyncapi.yaml`. Reference the canonical schema with `$ref` and `schemaFormat: application/schema+json;version=2020-12`; never copy its fields into the AsyncAPI file.
+- The AsyncAPI parser does not validate Draft 2020-12 payloads; `validate-asyncapi.mjs` checks them with Ajv. Do not claim more than that.
+- Both scripts accept an optional repo-root argument (`node scripts/validate-json.mjs <dir>`) for negative tests on a scratch copy.
 
 ## Publishing
 
@@ -50,7 +59,7 @@ No validation scripts exist yet. Do not document or call commands that are not i
 
 1. Inspect the relevant files before editing; never overwrite unrelated work or uncommitted changes.
 2. Keep changes focused. Update schema, examples and docs together in the same PR when a contract changes.
-3. Build (and validate, once available) locally before opening a PR.
+3. Run `npm run validate` and `npm run docs:build` locally before opening a PR.
 4. Use PRs and review; follow [CONTRIBUTING.md](CONTRIBUTING.md) (branch names like `docs/…`, `feat/…`, `schema/…`).
 5. Do not commit, push or publish unless asked.
 

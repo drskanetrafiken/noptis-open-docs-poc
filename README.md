@@ -59,9 +59,21 @@ To contribute a translation, create or update the relevant Markdown files and su
 
 See [CONTRIBUTING.md](https://github.com/drskanetrafiken/noptis-open-docs-poc/blob/main/CONTRIBUTING.md) for additional guidelines.
 
+## Repository Layout
+
+| Path | Contents |
+| --- | --- |
+| `docs/` | VitePress documentation website |
+| `schemas/` | Machine-readable schemas (source of truth) |
+| `examples/` | Sample messages, mirroring the `schemas/` directory tree |
+| `apis/` | API definitions (AsyncAPI) |
+| `scripts/` | Validation scripts used by `npm run validate` |
+
+`schemas/realtime/dvj-snapshot/demo/`, `examples/realtime/dvj-snapshot/demo/` and `apis/realtime/dvj-snapshot/demo/` hold an **illustrative, non-official** DVJ Snapshot demo (JSON Schema Draft 2020-12, a sample snapshot and an AsyncAPI 3.0 MQTT description). It is not the NOPTIS PoC 2 v0.3.0 schema. RII folders are placeholders.
+
 ## Run Locally
 
-The documentation website uses VitePress and requires **Node.js 20 or later**.
+The documentation website uses VitePress and requires **Node.js 20 or later** (CI uses Node.js 22).
 
 Clone the repository:
 
@@ -73,9 +85,17 @@ cd noptis-open-docs-poc
 Install dependencies and start the development server:
 
 ```bash
-npm install
+npm ci
 npm run docs:dev
 ```
+
+Validate schemas, examples and AsyncAPI documents:
+
+```bash
+npm run validate
+```
+
+`npm run validate` runs `validate:json` (each `schemas/**/schema.json` is checked as JSON Schema Draft 2020-12 with Ajv, and every JSON example in the matching `examples/` folder is validated against it) and `validate:asyncapi` (each `apis/**/asyncapi.yaml` is checked with the AsyncAPI parser, including `$ref` resolution). The AsyncAPI parser does not check Draft 2020-12 payload schemas, so the script checks the referenced schema with Ajv instead.
 
 Build and preview the static documentation website:
 
@@ -84,7 +104,9 @@ npm run docs:build
 npm run docs:preview
 ```
 
-For reproducible builds, commit the generated `package-lock.json` file and use `npm ci` in CI workflows once the lockfile is available.
+### Checks on Pull Requests
+
+The **Validate documentation** workflow (`.github/workflows/checks.yml`) runs on every Pull Request and on pushes to `main`: `npm ci`, `npm run validate` and `npm run docs:build`. Passing checks do not approve a specification; see [Governance and Versioning](#governance-and-versioning) and [Licensing](#licensing).
 
 ## GitHub Pages
 

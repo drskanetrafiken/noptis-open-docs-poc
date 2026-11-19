@@ -1,0 +1,66 @@
+asyncapi: 3.0.0
+info:
+  title: DVJ Snapshot (demo)
+  version: demo
+  description: |
+    ILLUSTRATIVE DEMO ONLY. Not an official or approved NOPTIS specification and
+    not the NOPTIS PoC 2 v0.3.0 interface. Shows how a DVJ Snapshot could be
+    published over MQTT, loosely based on the PoC 2 whitepaper.
+
+    Versions are distinct: the `v1` topic segment is an illustrative topic
+    version; it is not the NOPTIS 2.0 initiative version, schema v0.3.0 or the
+    `demo` files in this repository.
+
+    The message payload is the standalone JSON Schema Draft 2020-12 file
+    `schemas/realtime/dvj-snapshot/demo/schema.json` (referenced, not copied).
+    AsyncAPI tooling resolves that reference but does not validate Draft 2020-12
+    semantics; the schema and its examples are validated with Ajv
+    (`npm run validate`).
+servers:
+  demo:
+    host: broker.example.com:1883
+    protocol: mqtt
+    description: Placeholder on the reserved example.com domain. No real broker, credentials or authorization are defined.
+channels:
+  serviceJourney:
+    address: service-journey/v1/{transportAuthority}/{operatingDay}/{line}/{journeyNumber}
+    title: Service journey snapshots
+    description: One topic per service journey; each message is a full snapshot of its current state.
+    parameters:
+      transportAuthority:
+        description: Transport authority that owns the journey.
+      operatingDay:
+        description: Operating day of the journey (YYYY-MM-DD).
+        examples:
+          - '2026-11-11'
+      line:
+        description: Line designation.
+      journeyNumber:
+        description: Journey number within the line and operating day.
+    messages:
+      dvjSnapshot:
+        $ref: '#/components/messages/dvjSnapshot'
+operations:
+  publishDvjSnapshot:
+    action: send
+    title: Publish DVJ snapshot
+    summary: Publish the latest snapshot of a service journey.
+    channel:
+      $ref: '#/channels/serviceJourney'
+    messages:
+      - $ref: '#/channels/serviceJourney/messages/dvjSnapshot'
+    bindings:
+      mqtt:
+        qos: 1
+        retain: true
+        bindingVersion: 0.2.0
+components:
+  messages:
+    dvjSnapshot:
+      name: DvjSnapshot
+      title: DVJ snapshot (demo)
+      contentType: application/json
+      payload:
+        schemaFormat: application/schema+json;version=2020-12
+        schema:
+          $ref: '../../../../schemas/realtime/dvj-snapshot/demo/schema.json'
